@@ -1,0 +1,13 @@
+package blackjack.Natural;
+
+import external.*;
+import ddt.lang.*; 
+import res.*;
+import blackjack.*;
+
+domain Natural extends Blackjack {
+	events: {
+		Natural;
+	}
+	
+}

@@ -1,0 +1,123 @@
+package blackjack;
+
+import res.*;
+import external.*;
+import java.util.*;
+
+anchor feature BasicBJ {
+	domain: Blackjack;
+	
+	initialize {
+		condition: state.equalsToConstant(State.INIT);
+		event: Init;{
+			player.reset();
+			dealer.reset();
+			System.out.println("game start");
+			state = State.DEAL_CARD;
+		}
+	}
+	
+	dealCardToPlayer {
+		condition: state.equalsToConstant(State.DEAL_CARD);
+		event: enter;{
+			// First card
+			player.deliverCard(deck.dealCardFaceUp());
+			// Second card
+			player.deliverCard(deck.dealCardFaceUp());
+			state = State.PLAY;
+		}
+	}
+	
+	dealCardToDealer {
+		condition: state.equalsToConstant(State.DEAL_CARD);
+		event: leave;{
+			dealer.deliverCard(deck.dealCardFaceUp());
+			dealer.deliverCard(deck.dealCardFaceDown());
+		}
+	}
+	
+	enterPlay {
+    	condition: state.equalsToConstant(State.PLAY);
+    	event: enter;{
+      		player.askHitOrStand();
+      	}
+    }
+  
+  	hitAtPlay {
+    	condition: state.equalsToConstant(State.PLAY);
+    	event: Hit;{
+      		player.deliverCard (deck.dealCardFaceUp());
+      		if(player.getCardsSum() < 21){
+        		player.askHitOrStand ();
+	    	} else {	// Player busted
+	       		state = State.JUDGE;
+	    	}
+    	}
+  	}
+  
+  	standAtPlay {
+    	condition: state.equalsToConstant(State.PLAY);
+    	event: Stand;{
+      		state = State.JUDGE;
+    	}
+  	}
+  	
+  	leaveAtPlay {
+  		condition: state.equalsToConstant(State.PLAY);
+  		event: leave;{
+  			dealer.openFaceDownCards();
+  			while(dealer.getCardsSum() < 16) {
+  				dealer.deliverCard(deck.dealCardFaceUp());
+  			}
+  		}
+  	}
+  	
+  	enterJudge{
+    	condition: state.equalsToConstant(State.JUDGE);
+    	event: enter;{ 
+      		if(player.isBJ()){
+	        	if(dealer.isBJ()){
+	          		player.hasDrawn();
+	        	}else{
+	          		player.hasWon();
+	        	}
+      		}else if(dealer.isBJ()){
+          		player.hasLost();
+      		}else{
+			    int pSum = 0;
+			    int dSum = 0;     
+		        pSum = player.getCardsSum();
+		        dSum = dealer.getCardsSum();
+        
+	        	if(pSum > 21){
+		          	if(dSum > 21){
+		            	player.hasDrawn();
+		          	}else{
+		           	 	player.hasLost();
+		          	}
+	        	}else{
+		          	if(pSum > dSum){
+		            	player.hasWon();
+		          	}else if(pSum == dSum){
+		            	player.hasDrawn();
+		          	}else{
+		           		if( dSum > 21 ){
+		              		player.hasWon();
+		            	}else{
+		              		player.hasLost();
+		            	}
+	          		}
+	        	}
+	      	}
+	      	state = State.END;
+    	}
+  	}
+    
+  	GameOver {
+	  	condition: state.equalsToConstant(State.END);
+		  	event:enter; {
+		  	player.sayGameOver();
+	  	}
+  	}
+	
+}

@@ -1,0 +1,13 @@
+package blackjack.Split;
+
+import external.*;
+import ddt.lang.*; 
+import res.*;
+import blackjack.*;
+
+domain Split extends Blackjack {
+	events: {
+		Split;
+	}
+	
+}

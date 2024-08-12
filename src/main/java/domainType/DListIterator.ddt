@@ -1,0 +1,44 @@
+package domainType;
+
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Enumeration;
+import java.util.Hashtable;
+import java.util.List;
+
+import cf.lang.*;
+import ddt.lang.*;
+import partialOrderPlanner.CompositeContent;
+import commoncode.*;
+
+domainDataType DListIterator uses Content<Dinteger>
+{
+   	Iterator iter;
+   	List l;
+
+	public DListIterator() {
+		this.l = null;
+		this.iter = null;
+	}
+
+	public DListIterator(List x) {
+		this.l = x;
+		this.iter = this.l.iterator();
+	}
+
+	public List getList() {
+		return this.l;
+	}
+	
+	public void reset() {
+		this.iter = this.l.iterator();
+	}
+	
+	public Object next() {
+		return this.iter.next();
+	}
+	
+	public boolean hasNext() {
+		return this.iter.hasNext();
+	}
+}

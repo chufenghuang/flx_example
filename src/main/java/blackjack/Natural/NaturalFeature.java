@@ -1,0 +1,316 @@
+package blackjack.Natural;
+import blackjack.*;
+import res.*;
+import external.*;/**
+
+ Blackjack**/
+
+import java.io.Serializable;
+import rmi.RMIService;
+import java.lang.Cloneable;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.List;
+import java.util.LinkedList;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ExecutorService;
+
+public class NaturalFeature
+ extends BlackjackDomain implements Serializable 
+{
+
+BasicBJFeature _basicbjfeature;
+private boolean activated = true;
+Map<String, Boolean> previousState = new HashMap<String, Boolean>();
+public EventBuffer<FL_EVENT_STEM> sharedBuffer;
+
+public EventBuffer<FL_EVENT_STEM> getSharedBuffer(){
+return this.sharedBuffer;
+}
+public void activate() { }
+public void deactivate() { }
+public boolean isActivated() { return activated; }
+public FL_EVENT_STEM when_event_variable;
+
+public NaturalFeature(  Player  player ,   Dealer  dealer) {
+super();
+BlackjackDomain.deck = deck;
+BlackjackDomain.dealer = dealer;
+BlackjackDomain.player = player;
+BlackjackDomain.state = State  . INIT;
+{Map<String, Boolean>currentState= new HashMap<String, Boolean>(previousState);
+currentState.put("blackjackdomain.state.equalstoconstant(state.play)",BlackjackDomain.state.equalsToConstant(State.PLAY));
+currentState.put("blackjackdomain.state.equalstoconstant(state.deal_card)",BlackjackDomain.state.equalsToConstant(State.DEAL_CARD));
+currentState.put("blackjackdomain.state.equalstoconstant(state.end)",BlackjackDomain.state.equalsToConstant(State.END));
+currentState.put("blackjackdomain.state.equalstoconstant(state.judge)",BlackjackDomain.state.equalsToConstant(State.JUDGE));
+previousState = new HashMap<String, Boolean>(currentState);}
+sharedBuffer = new EventBuffer<FL_EVENT_STEM>();
+this._basicbjfeature = new BasicBJFeature();
+this._basicbjfeature.sharedBuffer = sharedBuffer;
+ExecutorService threadExecuter = Executors.newCachedThreadPool();
+Consumer consumer = new Consumer(sharedBuffer);
+threadExecuter.execute(consumer);
+}
+class Consumer implements Runnable{
+private EventBuffer<FL_EVENT_STEM> buffer;
+public Consumer(EventBuffer<FL_EVENT_STEM> buffer){
+this.buffer = buffer;
+}
+public void run() {
+while(true){
+try{
+NaturalFeature.this.XEvent((FL_EVENT_STEM)buffer.remove());
+}catch(Exception ex){
+ex.printStackTrace();
+}//end of catch
+}//end of while
+}//end of run
+}//end of Consumer Class
+public  NaturalFeature(BasicBJFeature _basicbjfeature)
+ {
+super();
+this._basicbjfeature = _basicbjfeature;
+}
+/***********************************/
+
+ ;
+
+ 
+         
+      
+ 
+ /**********************************/
+public synchronized void naturalEnterPlay( FL_EVENT_STEM  e)
+{
+try { 
+if (activated)
+{
+if ( player . isBJ ( ) ) {
+state = State . JUDGE ;
+}
+}
+
+} 
+finally {}
+}
+
+
+ 
+         
+      
+ 
+ public boolean get_naturalLeavePlay_0_condition(){
+return (player.isBJ());
+}
+/**********************************/
+public synchronized void naturalLeavePlay_0( FL_EVENT_STEM  e)
+{
+try { 
+if (activated)
+{
+if ( dealer . isAJKQOpenCard ( ) ) {
+dealer . openFaceDownCards ( ) ;
+}
+}
+
+} 
+finally {}
+}
+
+
+public void sendEvent( FL_EVENT_STEM e ) {
+	sharedBuffer.add(e);
+}
+public synchronized void XEvent(final FL_EVENT_STEM e )
+{
+this.when_event_variable = e;
+this._basicbjfeature.when_event_variable = e;
+{Map<String, Boolean>currentState= new HashMap<String, Boolean>(previousState);
+currentState.put("blackjackdomain.state.equalstoconstant(state.play)",BlackjackDomain.state.equalsToConstant(State.PLAY));
+currentState.put("blackjackdomain.state.equalstoconstant(state.deal_card)",BlackjackDomain.state.equalsToConstant(State.DEAL_CARD));
+currentState.put("blackjackdomain.state.equalstoconstant(state.end)",BlackjackDomain.state.equalsToConstant(State.END));
+currentState.put("blackjackdomain.state.equalstoconstant(state.judge)",BlackjackDomain.state.equalsToConstant(State.JUDGE));
+previousState = new HashMap<String, Boolean>(currentState);}
+		if ( e instanceof Hit) {
+boolean _basicbjfeaturehitAtPlaynotskip = true;
+if (_basicbjfeaturehitAtPlaynotskip == true &&(BlackjackDomain.state.equalsToConstant(State.PLAY))) {
+ if((BlackjackDomain.state.equalsToConstant(State.PLAY))) _basicbjfeature.hitAtPlay((Hit) e);
+
+}			}
+		else if ( e instanceof Stand) {
+boolean _basicbjfeaturestandAtPlaynotskip = true;
+if (_basicbjfeaturestandAtPlaynotskip == true &&(BlackjackDomain.state.equalsToConstant(State.PLAY))) {
+ if((BlackjackDomain.state.equalsToConstant(State.PLAY))) _basicbjfeature.standAtPlay((Stand) e);
+
+}			}
+		else if ( e instanceof Init) {
+boolean _basicbjfeatureinitializenotskip = true;
+if (_basicbjfeatureinitializenotskip == true &&(BlackjackDomain.state.equalsToConstant(State.INIT))) {
+ if((BlackjackDomain.state.equalsToConstant(State.INIT))) _basicbjfeature.initialize((Init) e);
+
+}			}
+else{/* no event matched*/}
+{Map<String, Boolean>currentState= new HashMap<String, Boolean>(previousState);
+currentState.put("blackjackdomain.state.equalstoconstant(state.play)",BlackjackDomain.state.equalsToConstant(State.PLAY));
+currentState.put("blackjackdomain.state.equalstoconstant(state.deal_card)",BlackjackDomain.state.equalsToConstant(State.DEAL_CARD));
+currentState.put("blackjackdomain.state.equalstoconstant(state.end)",BlackjackDomain.state.equalsToConstant(State.END));
+currentState.put("blackjackdomain.state.equalstoconstant(state.judge)",BlackjackDomain.state.equalsToConstant(State.JUDGE));
+if(currentState.equals(previousState))return;}
+boolean possibleEnter = true; boolean possibleLeave = true;
+Map<String, Boolean> temp;
+while(true){
+boolean noLeaveEvent = true;
+boolean noEnterEvent = true;
+temp = new HashMap<String, Boolean>(previousState);
+temp.put("blackjackdomain.state.equalstoconstant(state.end)",BlackjackDomain.state.equalsToConstant(State.END));
+temp.put("blackjackdomain.state.equalstoconstant(state.judge)",BlackjackDomain.state.equalsToConstant(State.JUDGE));
+temp.put("blackjackdomain.state.equalstoconstant(state.play)",BlackjackDomain.state.equalsToConstant(State.PLAY));
+temp.put("blackjackdomain.state.equalstoconstant(state.deal_card)",BlackjackDomain.state.equalsToConstant(State.DEAL_CARD));
+if(possibleLeave){
+if (!(BlackjackDomain.state.equalsToConstant(State.PLAY)) && previousState.get("blackjackdomain.state.equalstoconstant(state.play)") && (this.get_naturalLeavePlay_0_condition())) {
+boolean thisnaturalLeavePlay_0notskip = true;
+boolean thisnaturalLeavePlay_0WhenCondtionResult = this.get_naturalLeavePlay_0_condition();
+boolean _basicbjfeaturedealCardToDealernotskip = true;
+boolean _basicbjfeatureleaveAtPlaynotskip = true;
+if (thisnaturalLeavePlay_0WhenCondtionResult &&thisnaturalLeavePlay_0notskip == true && !(BlackjackDomain.state.equalsToConstant(State.PLAY)) && previousState.get("blackjackdomain.state.equalstoconstant(state.play)")) {
+noLeaveEvent = false;
+ if(!(BlackjackDomain.state.equalsToConstant(State.PLAY))) this.naturalLeavePlay_0(e);
+
+_basicbjfeaturedealCardToDealernotskip = false;
+_basicbjfeatureleaveAtPlaynotskip = false;
+}if (_basicbjfeaturedealCardToDealernotskip == true && !(BlackjackDomain.state.equalsToConstant(State.DEAL_CARD)) && previousState.get("blackjackdomain.state.equalstoconstant(state.deal_card)")) {
+noLeaveEvent = false;
+ if(!(BlackjackDomain.state.equalsToConstant(State.DEAL_CARD))) _basicbjfeature.dealCardToDealer(e);
+
+_basicbjfeatureleaveAtPlaynotskip = false;
+}if (_basicbjfeatureleaveAtPlaynotskip == true && !(BlackjackDomain.state.equalsToConstant(State.PLAY)) && previousState.get("blackjackdomain.state.equalstoconstant(state.play)")) {
+noLeaveEvent = false;
+ if(!(BlackjackDomain.state.equalsToConstant(State.PLAY))) _basicbjfeature.leaveAtPlay(e);
+
+}}
+else {
+boolean thisnaturalLeavePlay_0notskip = true;
+boolean _basicbjfeaturedealCardToDealernotskip = true;
+boolean _basicbjfeatureleaveAtPlaynotskip = true;
+if ((this.get_naturalLeavePlay_0_condition()) &&thisnaturalLeavePlay_0notskip == true && !(BlackjackDomain.state.equalsToConstant(State.PLAY)) && previousState.get("blackjackdomain.state.equalstoconstant(state.play)")) {
+noLeaveEvent = false;
+ if(!(BlackjackDomain.state.equalsToConstant(State.PLAY))) this.naturalLeavePlay_0(e);
+
+}if (_basicbjfeaturedealCardToDealernotskip == true && !(BlackjackDomain.state.equalsToConstant(State.DEAL_CARD)) && previousState.get("blackjackdomain.state.equalstoconstant(state.deal_card)")) {
+noLeaveEvent = false;
+ if(!(BlackjackDomain.state.equalsToConstant(State.DEAL_CARD))) _basicbjfeature.dealCardToDealer(e);
+
+_basicbjfeatureleaveAtPlaynotskip = false;
+}if (_basicbjfeatureleaveAtPlaynotskip == true && !(BlackjackDomain.state.equalsToConstant(State.PLAY)) && previousState.get("blackjackdomain.state.equalstoconstant(state.play)")) {
+noLeaveEvent = false;
+ if(!(BlackjackDomain.state.equalsToConstant(State.PLAY))) _basicbjfeature.leaveAtPlay(e);
+
+}}
+}
+if(!noLeaveEvent){
+Map<String, Boolean>temp2 = new HashMap<String, Boolean>(previousState);
+temp2.put("blackjackdomain.state.equalstoconstant(state.end)",BlackjackDomain.state.equalsToConstant(State.END));
+temp2.put("blackjackdomain.state.equalstoconstant(state.judge)",BlackjackDomain.state.equalsToConstant(State.JUDGE));
+temp2.put("blackjackdomain.state.equalstoconstant(state.deal_card)",BlackjackDomain.state.equalsToConstant(State.DEAL_CARD));
+temp2.put("blackjackdomain.state.equalstoconstant(state.play)",BlackjackDomain.state.equalsToConstant(State.PLAY));
+if (!temp.equals(temp2)) {previousState = temp;possibleEnter = true;possibleLeave = true; }else{ possibleLeave = false;}
+}
+temp = new HashMap<String, Boolean>(previousState);
+temp.put("blackjackdomain.state.equalstoconstant(state.end)",BlackjackDomain.state.equalsToConstant(State.END));
+temp.put("blackjackdomain.state.equalstoconstant(state.judge)",BlackjackDomain.state.equalsToConstant(State.JUDGE));
+temp.put("blackjackdomain.state.equalstoconstant(state.play)",BlackjackDomain.state.equalsToConstant(State.PLAY));
+temp.put("blackjackdomain.state.equalstoconstant(state.deal_card)",BlackjackDomain.state.equalsToConstant(State.DEAL_CARD));
+if(possibleEnter){
+boolean thisnaturalEnterPlaynotskip = true;
+boolean _basicbjfeatureenterJudgenotskip = true;
+boolean _basicbjfeatureenterPlaynotskip = true;
+boolean _basicbjfeaturedealCardToPlayernotskip = true;
+boolean _basicbjfeatureGameOvernotskip = true;
+if (thisnaturalEnterPlaynotskip == true &&(BlackjackDomain.state.equalsToConstant(State.PLAY))&&temp.get("blackjackdomain.state.equalstoconstant(state.play)")&& !previousState.get("blackjackdomain.state.equalstoconstant(state.play)")) {
+noEnterEvent = false;
+ if((BlackjackDomain.state.equalsToConstant(State.PLAY))) this.naturalEnterPlay(e);
+
+}if (_basicbjfeatureenterJudgenotskip == true &&(BlackjackDomain.state.equalsToConstant(State.JUDGE))&&temp.get("blackjackdomain.state.equalstoconstant(state.judge)")&& !previousState.get("blackjackdomain.state.equalstoconstant(state.judge)")) {
+noEnterEvent = false;
+ if((BlackjackDomain.state.equalsToConstant(State.JUDGE))) _basicbjfeature.enterJudge(e);
+
+_basicbjfeatureenterPlaynotskip = false;
+_basicbjfeaturedealCardToPlayernotskip = false;
+_basicbjfeatureGameOvernotskip = false;
+}if (_basicbjfeatureenterPlaynotskip == true &&(BlackjackDomain.state.equalsToConstant(State.PLAY))&&temp.get("blackjackdomain.state.equalstoconstant(state.play)")&& !previousState.get("blackjackdomain.state.equalstoconstant(state.play)")) {
+noEnterEvent = false;
+ if((BlackjackDomain.state.equalsToConstant(State.PLAY))) _basicbjfeature.enterPlay(e);
+
+_basicbjfeaturedealCardToPlayernotskip = false;
+_basicbjfeatureGameOvernotskip = false;
+}if (_basicbjfeaturedealCardToPlayernotskip == true &&(BlackjackDomain.state.equalsToConstant(State.DEAL_CARD))&&temp.get("blackjackdomain.state.equalstoconstant(state.deal_card)")&& !previousState.get("blackjackdomain.state.equalstoconstant(state.deal_card)")) {
+noEnterEvent = false;
+ if((BlackjackDomain.state.equalsToConstant(State.DEAL_CARD))) _basicbjfeature.dealCardToPlayer(e);
+
+_basicbjfeatureGameOvernotskip = false;
+}if (_basicbjfeatureGameOvernotskip == true &&(BlackjackDomain.state.equalsToConstant(State.END))&&temp.get("blackjackdomain.state.equalstoconstant(state.end)")&& !previousState.get("blackjackdomain.state.equalstoconstant(state.end)")) {
+noEnterEvent = false;
+ if((BlackjackDomain.state.equalsToConstant(State.END))) _basicbjfeature.GameOver(e);
+
+}}
+if(!noEnterEvent){
+Map<String, Boolean>temp2 = new HashMap<String, Boolean>(previousState);
+temp2.put("blackjackdomain.state.equalstoconstant(state.end)",BlackjackDomain.state.equalsToConstant(State.END));
+temp2.put("blackjackdomain.state.equalstoconstant(state.judge)",BlackjackDomain.state.equalsToConstant(State.JUDGE));
+temp2.put("blackjackdomain.state.equalstoconstant(state.deal_card)",BlackjackDomain.state.equalsToConstant(State.DEAL_CARD));
+temp2.put("blackjackdomain.state.equalstoconstant(state.play)",BlackjackDomain.state.equalsToConstant(State.PLAY));
+previousState = temp;if (!temp.equals(temp2)) {possibleEnter = true;possibleLeave = true; }else{ possibleEnter = false;}
+}
+if(noLeaveEvent && noEnterEvent) break;
+}
+}
+
+public Object clone() throws CloneNotSupportedException {
+return super.clone();
+}
+
+
+protected void finalize() {
+try {
+super.finalize();
+} catch(Throwable e) {
+// do nothing
+}
+}
+
+}
+/* IntermediateInfo:FeatureInteractionTable
+rO0ABXNyACZjb3JlLnRhYmxlLkZlYXR1cmVJbnRlcmFjdGlvblRhYmxlSW1wbKRW9OnaNkzmAgAFWgAQaXNGZWF0dXJlTmFtZVNldEwAEmRlZmF1bHRQcmVSZWxhdGlvbnQAKkxjb3JlL2NvbXBpbGVyZXNvdXJjZXMvUHJlY2VkZW5jZVJlbGF0aW9uO0wAB2RvbWFpbnN0AA9MamF2YS91dGlsL1NldDtMAApldmVudE5vZGVzdAAoTGNvcmUvY29tcGlsZXJlc291cmNlcy9FdmVudE5vZGVNYXBJbXBsO0wAC2ZlYXR1cmVOYW1ldAASTGphdmEvbGFuZy9TdHJpbmc7eHABc3IAKWNvcmUuY29kZWdlbmVyYXRvci5QcmVjZWRlbmNlUmVsYXRpb25JbXBspX7kJRXyFGoCAAFMAAlwcmVPcmRlcnN0ABNMamF2YS91dGlsL0hhc2hTZXQ7eHIAJmNvcmUuY29kZWdlbmVyYXRvci5QYXJ0aWFsT3JkZXJpbmdUcmVl2diA5Z4HBGACAAFMAAVub2Rlc3QAFUxqYXZhL3V0aWwvSGFzaHRhYmxlO3hwc3IAE2phdmEudXRpbC5IYXNodGFibGUTuw8lIUrkuAMAAkYACmxvYWRGYWN0b3JJAAl0aHJlc2hvbGR4cD9AAAAAAAAIdwgAAAALAAAAAnQAB05hdHVyYWxzcgAXY29yZS5jb2RlZ2VuZXJhdG9yLk5vZGU57IiELEUMtAIABUkAFGRpcmVjdFByZWRlY2Vzc29yTnVtWgAKd2FzVmlzaXRlZEwAD2RpcmVjdFN1Y2NOb2Rlc3EAfgAJTAAFbGFiZWxxAH4ABEwAC3BhcmVudE5vZGVzcQB+AAd4cAAAAAAAc3EAfgALP0AAAAAAAAh3CAAAAAsAAAABc3EAfgAOAAAAAQBzcQB+AAs/QAAAAAAACHcIAAAACwAAAAB4dAAHQmFzaWNCSnNyABFqYXZhLnV0aWwuSGFzaFNldLpEhZWWuLc0AwAAeHB3DAAAABA/QAAAAAAAAXEAfgAPeHQAEnN0cmFpZ2h0UHJlY2VkZW5jZXhxAH4ADXNxAH4AFHcMAAAAED9AAAAAAAAAeHEAfgATcQB+ABF4c3EAfgAUdwwAAAAQP0AAAAAAAAFzcgATamF2YS51dGlsLkFycmF5TGlzdHiB0h2Zx2GdAwABSQAEc2l6ZXhwAAAAAncEAAAAAnEAfgANcQB+ABN4eHNyABdqYXZhLnV0aWwuTGlua2VkSGFzaFNldNhs11qV3SoeAgAAeHEAfgAUdwwAAAAQP0AAAAAAAAF0AAlCbGFja2phY2t4c3IAJmNvcmUuY29tcGlsZXJlc291cmNlcy5FdmVudE5vZGVNYXBJbXBsaDut0E+PmIICAAFMAANtYXB0AA9MamF2YS91dGlsL01hcDt4cHNxAH4ACz9AAAAAAAAIdwgAAAALAAAAAnQABWxlYXZlc3IAKmNvcmUuY29tcGlsZXJlc291cmNlcy5RdWFsaWZpZXJOb2RlTWFwSW1wbOrz3H3Lq6S1AgABTAADbWFwcQB+AB94cHNxAH4ACz9AAAAAAAAIdwgAAAALAAAAAXQAA2FsbHNyACpjb3JlLmNvbXBpbGVyZXNvdXJjZXMuQ29uZGl0aW9uTm9kZU1hcEltcGx3bBYqvueUaQIAAUwAA21hcHQAKExjb3JlL2NvbXBpbGVyZXNvdXJjZXMvT3JkZXJlZEhhc2h0YWJsZTt4cHNyACZjb3JlLmNvbXBpbGVyZXNvdXJjZXMuT3JkZXJlZEhhc2h0YWJsZXhkoN7SZCEwAgABTAAMa2V5T3JkZXJMaXN0dAAWTGphdmEvdXRpbC9MaW5rZWRMaXN0O3hxAH4ACz9AAAAAAAAIdwgAAAALAAAAAXQANUJsYWNramFja0RvbWFpbi5zdGF0ZS5lcXVhbHNUb0NvbnN0YW50KFN0YXRlICAuIFBMQVkpc3IAJWNvcmUuY29tcGlsZXJlc291cmNlcy5GaXRTdWJlbnRyeVRyZWVjlfz0CwGJqwIAA0wACGNoaWxkcmVudAAQTGphdmEvdXRpbC9MaXN0O0wAEWRlZmF1bHRQcmVjZWRlbmNlcQB+AAFMAAN2YWx0ACNMY29yZS9jb21waWxlcmVzb3VyY2VzL0ZpdFN1YmVudHJ5O3hwc3IAFGphdmEudXRpbC5MaW5rZWRMaXN0DClTXUpgiCIDAAB4cHcEAAAAAXNxAH4ALnNxAH4AMncEAAAAAHhzcQB+AAZzcQB+AAs/QAAAAAAACHcIAAAACwAAAAB4c3EAfgAUdwwAAAAQP0AAAAAAAAB4c3IAJWNvcmUuY29tcGlsZXJlc291cmNlcy5GaXRTdWJlbnRyeUltcGzqOTCcd/Uh5wIAB0kAD2NvbnRhaW5XaGVuRWxzZUwAEGZlYXR1cmVOYW1lRW50cnlxAH4ABEwAC3ByZVJlbGF0aW9ucQB+AAFMABBwcm9ncmFtQm9keUVudHJ5cQB+AARMABBwcm9ncmFtQ29uZGl0aW9ucQB+AARMABRwcm9ncmFtVW5pdE5hbWVFbnRyeXEAfgAETAANd2hlbkNvbmRpdGlvbnQAH0xjb3JlL2xhbmcvQ29uZGl0aW9uRXhwcmVzc2lvbjt4cP////90AAdOYXR1cmFsc3EAfgAGc3EAfgALP0AAAAAAAAh3CAAAAAsAAAACdAAHTmF0dXJhbHNxAH4ADgAAAAAAc3EAfgALP0AAAAAAAAh3CAAAAAsAAAABc3EAfgAOAAAAAQBzcQB+AAs/QAAAAAAACHcIAAAACwAAAAB4dAAHQmFzaWNCSnNxAH4AFHcMAAAAED9AAAAAAAABcQB+AEB4dAAScHJpb3JpdHlQcmVjZWRlbmNleHEAfgA/c3EAfgAUdwwAAAAQP0AAAAAAAAB4cQB+AERxAH4AQnhzcQB+ABR3DAAAABA/QAAAAAAAAHh0AFF7ICBpZiAoIGRlYWxlciAgLiBpc0FKS1FPcGVuQ2FyZCAoKSApIHsgICAgZGVhbGVyICAuIG9wZW5GYWNlRG93bkNhcmRzICgpICA7IH0gIH1xAH4ALXQAEm5hdHVyYWxMZWF2ZVBsYXlfMHNyAB1jb3JlLmxhbmcuQ29uZGl0aW9uRXhwcmVzc2lvboiK4hsevVSUAgAEWgAIbmVnYXRpdmVMAAVjaGlsZHEAfgA6TAAEbmV4dHEAfgA6TAADc3RycQB+AAR4cABwcHQADXBsYXllci5pc0JKKCl4c3EAfgAGc3EAfgALP0AAAAAAAAh3CAAAAAsAAAAAeHNxAH4AFHcMAAAAED9AAAAAAAAAeHB4c3EAfgAydwQAAAABcQB+AC14eHQABWVudGVyc3EAfgAjc3EAfgALP0AAAAAAAAh3CAAAAAsAAAABcQB+ACZzcQB+ACdzcQB+ACo/QAAAAAAACHcIAAAACwAAAAF0ADVCbGFja2phY2tEb21haW4uc3RhdGUuZXF1YWxzVG9Db25zdGFudChTdGF0ZSAgLiBQTEFZKXNxAH4ALnNxAH4AMncEAAAAAXNxAH4ALnNxAH4AMncEAAAAAHhzcQB+AAZzcQB+AAs/QAAAAAAACHcIAAAACwAAAAB4c3EAfgAUdwwAAAAQP0AAAAAAAAB4c3IAJ2NvcmUuY29tcGlsZXJlc291cmNlcy5GaXRQdVN1YmVudHJ5SW1wbMnqIzs+5hOaAgABTAADbWFwcQB+AB94cQB+ADn/////cQB+ADxzcQB+AAZzcQB+AAs/QAAAAAAACHcIAAAACwAAAAB4c3EAfgAUdwwAAAAQP0AAAAAAAAB4dAA7IGlmICggcGxheWVyICAuIGlzQkogKCkgKSB7ICAgIHN0YXRlICA9IFN0YXRlICAuIEpVREdFIDsgfSBxAH4AV3QAEG5hdHVyYWxFbnRlclBsYXlzcQB+AEsAcHB0AAR0cnVlc3IAEWphdmEudXRpbC5IYXNoTWFwBQfawcMWYNEDAAJGAApsb2FkRmFjdG9ySQAJdGhyZXNob2xkeHA/QAAAAAAAAHcIAAAAEAAAAAB4eHNxAH4ABnNxAH4ACz9AAAAAAAAIdwgAAAALAAAAAHhzcQB+ABR3DAAAABA/QAAAAAAAAHhweHNxAH4AMncEAAAAAXEAfgBXeHh4cQB+ADw=
+
+*/
+
+
+/* IntermediateInfo:MergedFeatureInteractionTable
+rO0ABXNyACZjb3JlLnRhYmxlLkZlYXR1cmVJbnRlcmFjdGlvblRhYmxlSW1wbKRW9OnaNkzmAgAFWgAQaXNGZWF0dXJlTmFtZVNldEwAEmRlZmF1bHRQcmVSZWxhdGlvbnQAKkxjb3JlL2NvbXBpbGVyZXNvdXJjZXMvUHJlY2VkZW5jZVJlbGF0aW9uO0wAB2RvbWFpbnN0AA9MamF2YS91dGlsL1NldDtMAApldmVudE5vZGVzdAAoTGNvcmUvY29tcGlsZXJlc291cmNlcy9FdmVudE5vZGVNYXBJbXBsO0wAC2ZlYXR1cmVOYW1ldAASTGphdmEvbGFuZy9TdHJpbmc7eHABc3IAKWNvcmUuY29kZWdlbmVyYXRvci5QcmVjZWRlbmNlUmVsYXRpb25JbXBspX7kJRXyFGoCAAFMAAlwcmVPcmRlcnN0ABNMamF2YS91dGlsL0hhc2hTZXQ7eHIAJmNvcmUuY29kZWdlbmVyYXRvci5QYXJ0aWFsT3JkZXJpbmdUcmVl2diA5Z4HBGACAAFMAAVub2Rlc3QAFUxqYXZhL3V0aWwvSGFzaHRhYmxlO3hwc3IAE2phdmEudXRpbC5IYXNodGFibGUTuw8lIUrkuAMAAkYACmxvYWRGYWN0b3JJAAl0aHJlc2hvbGR4cD9AAAAAAAAIdwgAAAALAAAAAnQAB05hdHVyYWxzcgAXY29yZS5jb2RlZ2VuZXJhdG9yLk5vZGU57IiELEUMtAIABUkAFGRpcmVjdFByZWRlY2Vzc29yTnVtWgAKd2FzVmlzaXRlZEwAD2RpcmVjdFN1Y2NOb2Rlc3EAfgAJTAAFbGFiZWxxAH4ABEwAC3BhcmVudE5vZGVzcQB+AAd4cAAAAAAAc3EAfgALP0AAAAAAAAh3CAAAAAsAAAABc3EAfgAOAAAAAQBzcQB+AAs/QAAAAAAACHcIAAAACwAAAAB4dAAHQmFzaWNCSnNyABFqYXZhLnV0aWwuSGFzaFNldLpEhZWWuLc0AwAAeHB3DAAAABA/QAAAAAAAAXEAfgAPeHQAEnN0cmFpZ2h0UHJlY2VkZW5jZXhxAH4ADXNxAH4AFHcMAAAAED9AAAAAAAAAeHEAfgATcQB+ABF4c3EAfgAUdwwAAAAQP0AAAAAAAAFzcgATamF2YS51dGlsLkFycmF5TGlzdHiB0h2Zx2GdAwABSQAEc2l6ZXhwAAAAAncEAAAAAnEAfgANcQB+ABN4eHNyABdqYXZhLnV0aWwuTGlua2VkSGFzaFNldNhs11qV3SoeAgAAeHEAfgAUdwwAAAAQP0AAAAAAAAF0AAlCbGFja2phY2t4c3IAJmNvcmUuY29tcGlsZXJlc291cmNlcy5FdmVudE5vZGVNYXBJbXBsaDut0E+PmIICAAFMAANtYXB0AA9MamF2YS91dGlsL01hcDt4cHNxAH4ACz9AAAAAAAAIdwgAAAALAAAABXQADWJsYWNramFjay5IaXRzcgAqY29yZS5jb21waWxlcmVzb3VyY2VzLlF1YWxpZmllck5vZGVNYXBJbXBs6vPcfcurpLUCAAFMAANtYXBxAH4AH3hwc3EAfgALP0AAAAAAAAh3CAAAAAsAAAABdAADYWxsc3IAKmNvcmUuY29tcGlsZXJlc291cmNlcy5Db25kaXRpb25Ob2RlTWFwSW1wbHdsFiq+55RpAgABTAADbWFwdAAoTGNvcmUvY29tcGlsZXJlc291cmNlcy9PcmRlcmVkSGFzaHRhYmxlO3hwc3IAJmNvcmUuY29tcGlsZXJlc291cmNlcy5PcmRlcmVkSGFzaHRhYmxleGSg3tJkITACAAFMAAxrZXlPcmRlckxpc3R0ABZMamF2YS91dGlsL0xpbmtlZExpc3Q7eHEAfgALP0AAAAAAAAh3CAAAAAsAAAABdAA9QmFzaWNCSi5CbGFja2phY2tEb21haW4uc3RhdGUuZXF1YWxzVG9Db25zdGFudChTdGF0ZSAgLiBQTEFZKXNyACVjb3JlLmNvbXBpbGVyZXNvdXJjZXMuRml0U3ViZW50cnlUcmVlY5X89AsBiasCAANMAAhjaGlsZHJlbnQAEExqYXZhL3V0aWwvTGlzdDtMABFkZWZhdWx0UHJlY2VkZW5jZXEAfgABTAADdmFsdAAjTGNvcmUvY29tcGlsZXJlc291cmNlcy9GaXRTdWJlbnRyeTt4cHNyABRqYXZhLnV0aWwuTGlua2VkTGlzdAwpU11KYIgiAwAAeHB3BAAAAAFzcQB+AC5zcQB+ADJ3BAAAAAB4c3EAfgAGc3EAfgALP0AAAAAAAAJ3CAAAAAMAAAAAeHNxAH4AFHcMAAAAAT9AAAAAAAAAeHNyACdjb3JlLmNvbXBpbGVyZXNvdXJjZXMuRml0UHVTdWJlbnRyeUltcGzJ6iM7PuYTmgIAAUwAA21hcHEAfgAfeHIAJWNvcmUuY29tcGlsZXJlc291cmNlcy5GaXRTdWJlbnRyeUltcGzqOTCcd/Uh5wIAB0kAD2NvbnRhaW5XaGVuRWxzZUwAEGZlYXR1cmVOYW1lRW50cnlxAH4ABEwAC3ByZVJlbGF0aW9ucQB+AAFMABBwcm9ncmFtQm9keUVudHJ5cQB+AARMABBwcm9ncmFtQ29uZGl0aW9ucQB+AARMABRwcm9ncmFtVW5pdE5hbWVFbnRyeXEAfgAETAANd2hlbkNvbmRpdGlvbnQAH0xjb3JlL2xhbmcvQ29uZGl0aW9uRXhwcmVzc2lvbjt4cP////90AAdCYXNpY0JKc3EAfgAGc3EAfgALP0AAAAAAAAJ3CAAAAAMAAAAAeHNxAH4AFHcMAAAAAT9AAAAAAAAAeHQAqSAgIHBsYXllciAgLiBkZWxpdmVyQ2FyZCAoZGVjayAgLiBkZWFsQ2FyZEZhY2VVcCAoKSkgIDsgaWYgKCBwbGF5ZXIgIC4gZ2V0Q2FyZHNTdW0gKCkgIDwgMjEgKSB7ICAgIHBsYXllciAgLiBhc2tIaXRPclN0YW5kICgpICA7IH0gIGVsc2UgeyAgICBzdGF0ZSAgPSBTdGF0ZSAgLiBKVURHRSA7IH10ADVCbGFja2phY2tEb21haW4uc3RhdGUuZXF1YWxzVG9Db25zdGFudChTdGF0ZSAgLiBQTEFZKXQACWhpdEF0UGxheXNyAB1jb3JlLmxhbmcuQ29uZGl0aW9uRXhwcmVzc2lvboiK4hsevVSUAgAEWgAIbmVnYXRpdmVMAAVjaGlsZHEAfgA7TAAEbmV4dHEAfgA7TAADc3RycQB+AAR4cABwcHQABHRydWVzcgARamF2YS51dGlsLkhhc2hNYXAFB9rBwxZg0QMAAkYACmxvYWRGYWN0b3JJAAl0aHJlc2hvbGR4cD9AAAAAAAAAdwgAAAAQAAAAAHh4c3EAfgAGc3EAfgALP0AAAAAAAAJ3CAAAAAMAAAAAeHNxAH4AFHcMAAAAAT9AAAAAAAAAeHB4c3EAfgAydwQAAAABcQB+AC14eHQAD2JsYWNramFjay5TdGFuZHNxAH4AI3NxAH4ACz9AAAAAAAAIdwgAAAALAAAAAXEAfgA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
+
+*/
+
+
+/* IntermediateInfo:domains
+rO0ABXNyABdqYXZhLnV0aWwuTGlua2VkSGFzaFNldNhs11qV3SoeAgAAeHIAEWphdmEudXRpbC5IYXNoU2V0ukSFlZa4tzQDAAB4cHcMAAAAED9AAAAAAAABdAAJQmxhY2tqYWNreA==
+
+*/
+
+
+/* IntermediateInfo:isExecutable
+rO0ABXNyABFqYXZhLmxhbmcuQm9vbGVhbs0gcoDVnPruAgABWgAFdmFsdWV4cAE=
+
+*/
+
+
+/* IntermediateInfo:proceedToPuhandler
+rO0ABXNyABNqYXZhLnV0aWwuQXJyYXlMaXN0eIHSHZnHYZ0DAAFJAARzaXpleHAAAAACdwQAAAACc3IAJ2NvcmUuZGF0YXN0cnVjdHVyZS5Qcm9jZWVkVG9IYW5kbGVySW5mb/NJGznJidC0AgAJTAAJY29uZGl0aW9udAASTGphdmEvbGFuZy9TdHJpbmc7TAAPZXZlbnRJZGVudGlmaWVycQB+AANMAAlldmVudFR5cGVxAH4AA0wAD2ZlYXR1cmVJbnN0YW5jZXEAfgADTAALZmVhdHVyZU5hbWVxAH4AA0wACXByb2NlZWRUb3EAfgADTAARcHJvY2VlZFRvSW5zdGFuY2VxAH4AA0wABnB1TmFtZXEAfgADTAAHcHVUb0FkZHEAfgADeHB0ADVCbGFja2phY2tEb21haW4uc3RhdGUuZXF1YWxzVG9Db25zdGFudChTdGF0ZSAgLiBQTEFZKXQAAWV0AAVlbnRlcnQAD19uYXR1cmFsZmVhdHVyZXQAB05hdHVyYWxwcHQAEG5hdHVyYWxFbnRlclBsYXlwc3EAfgACdAA1QmxhY2tqYWNrRG9tYWluLnN0YXRlLmVxdWFsc1RvQ29uc3RhbnQoU3RhdGUgIC4gUExBWSlxAH4ABnQABWxlYXZldAAPX25hdHVyYWxmZWF0dXJlcQB+AAlwcHQAEm5hdHVyYWxMZWF2ZVBsYXlfMHB4
+
+*/
+
+
+/* IntermediateInfo:anchorFeature
+rO0ABXQAB0Jhc2ljQko=
+
+*/
+

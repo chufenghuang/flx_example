@@ -1,0 +1,25 @@
+java -cp "FLXCompiler-3.07.jar:./src/main/java" main.Flxc  ./src main/java/blackjack Init.event
+java -cp "FLXCompiler-3.07.jar:./src/main/java" main.Flxc  ./src main/java/blackjack Hit.event
+java -cp "FLXCompiler-3.07.jar:./src/main/java" main.Flxc  ./src main/java/blackjack Stand.event
+
+java -cp "FLXCompiler-3.07.jar:./src/main/java" main.Flxc  ./src main/java/blackjack Blackjack.domain
+java -cp "FLXCompiler-3.07.jar:./src/main/java" main.Flxc  ./src main/java/blackjack BasicBJ.af
+
+
+# compiling playagain 
+java -cp "FLXCompiler-3.07.jar:./src/main/java" main.Flxc  ./src main/java/blackjack/PlayAgain PlayAgain.event
+java -cp "FLXCompiler-3.07.jar:./src/main/java" main.Flxc  ./src main/java/blackjack/PlayAgain PlayAgain.domain
+java -cp "FLXCompiler-3.07.jar:./src/main/java" main.Flxc  ./src main/java/blackjack/PlayAgain PlayAgain.f
+
+#compiling split
+java -cp "FLXCompiler-3.07.jar:./src/main/java" main.Flxc  ./src main/java/blackjack/Split Split.event
+java -cp "FLXCompiler-3.07.jar:./src/main/java" main.Flxc  ./src main/java/blackjack/Split Split.domain
+java -cp "FLXCompiler-3.07.jar:./src/main/java" main.Flxc  ./src main/java/blackjack/Split Split.f
+
+# compiling Natural
+java -cp "FLXCompiler-3.07.jar:./src/main/java" main.Flxc  ./src main/java/blackjack/Natural Natural.event
+java -cp "FLXCompiler-3.07.jar:./src/main/java" main.Flxc  ./src main/java/blackjack/Natural Natural.domain
+java -cp "FLXCompiler-3.07.jar:./src/main/java" main.Flxc  ./src main/java/blackjack/Natural Natural.f
+
+# compiling Integration Package
+java -cp "FLXCompiler-3.07.jar:./src/main/java" main.Flxc  ./src main/java/blackjack/PackageIntergration NaturalSplit.fp

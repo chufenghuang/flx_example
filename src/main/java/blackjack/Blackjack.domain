@@ -1,0 +1,23 @@
+package blackjack;
+
+import external.*;
+import ddt.lang.*; 
+import res.*;
+
+domain Blackjack {
+	variables: {
+		dtenum State {INIT, DEAL_CARD, PLAY, JUDGE, END}
+		public static DTenum state = State.INIT;
+	}
+	events: {
+		Init;
+		Hit;
+		Stand;
+	}
+	resources: {
+		public static Player player;
+		public static Dealer dealer;
+		public static Deck deck = new Deck(52);
+	}
+}
+

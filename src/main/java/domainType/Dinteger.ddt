@@ -1,0 +1,39 @@
+package ddt.lang;
+
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Enumeration;
+import java.util.Hashtable;
+
+import cf.lang.*;
+import partialOrderPlanner.CompositePOP;
+import commonCode.LiteralScanner;
+
+
+domainDataType Dinteger uses BoundPartialOrderWithEquality<Dinteger>
+{
+  int value;
+
+  public Dinteger() {
+		this.value = 0;
+  }
+
+  public Dinteger(int x) {
+		this.value = x;
+  }
+
+  public int intValue() {
+    return this.value;
+  }
+
+  public Dinteger add(int value){
+    this.value += value;
+    return this;
+  }
+	
+  public Dinteger minus(int value){
+    this.value -=value;
+    return this; 
+  }
+   
+}

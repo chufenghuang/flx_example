@@ -1,0 +1,5 @@
+package blackjack.PlayAgain;
+
+public event PlayAgain{
+
+}

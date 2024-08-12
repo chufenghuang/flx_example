@@ -1,0 +1,14 @@
+package blackjack.PlayAgain;
+
+import external.*;
+import ddt.lang.*; 
+import res.*;
+import blackjack.*;
+
+domain PlayAgain extends Blackjack {
+	events: {
+		PlayAgain;
+	}
+	
+}
+
